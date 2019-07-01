@@ -5,6 +5,9 @@ let terminalContainer = document.getElementById('terminal');
 let sendForm = document.getElementById('send-form');
 let inputField = document.getElementById('input');
 
+const deviceUUid='6e400001-b5a3-f393-e0a9-e50e24dcca9e';
+const deviceChar='6e400003-b5a3-f393-e0a9-e50e24dcca9e'
+
 // Connect to the device on Connect button click
 connectButton.addEventListener('click', function() {
   connect();
@@ -42,7 +45,7 @@ function requestBluetoothDevice() {
   log('Requesting bluetooth device...');
 
   return navigator.bluetooth.requestDevice({
-    filters: [{services: ['6e400001-b5a3-f393-e0a9-e50e24dcca9e']}],
+    filters: [{services: [deviceUUid]}],
   }).
       then(device => {
         log('"' + device.name + '" bluetooth device selected');
@@ -68,12 +71,12 @@ function connectDeviceAndCacheCharacteristic(device) {
       then(server => {
         log('GATT server connected, getting service...');
 
-        return server.getPrimaryService('6e400001-b5a3-f393-e0a9-e50e24dcca9e');
+        return server.getPrimaryService(deviceUUid);
       }).
       then(service => {
         log('Service found, getting characteristic...');
 
-        return service.getCharacteristic('6e400003-b5a3-f393-e0a9-e50e24dcca9e');
+        return service.getCharacteristic(deviceChar);
       }).
       then(characteristic => {
         log('Characteristic found');
